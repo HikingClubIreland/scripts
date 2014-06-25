@@ -1,0 +1,99 @@
+templates:
+  tv:
+    private_torrents: no
+    regexp:
+      reject:
+        - french
+        - german
+        - dutch
+        - ipod
+        - sub[s][\s\._]: {from: title}
+        - 3D: {from: title}
+        - R5: {from: title}
+        - WEBSCR: {from: title}
+        - WEBRip: {from: title}
+        - Cam: {from: title}
+        - '(?x) (?:_|\b) (?: afg | msd | (\{?)c[_ ]p\1 | pimp4003 ) $': {from: title}
+    
+    content_filter:
+      require:
+        - '*.avi'
+        - '*.mp4'
+        - '*.mkv'
+
+    series:
+      settings:
+        tv:
+          exact: yes
+          propers: 3 days
+          quality: 720p+
+          set:
+            path: /media/shares/torrents/completed/series/{{series_name}}/Season {{"%02d"|format(series_season)}}/
+            label: "{{series_name}}"
+
+    transmission:
+      host: localhost
+      port: 9091
+      username: media
+      password: wt1lc111$
+    
+  movies:
+    regexp:
+      reject:
+        - french
+        - german
+        - dutch
+        - ipod
+        - sub[s][\s\._]: {from: title}
+        - 3D: {from: title}
+        - R5: {from: title}
+        - WEBSCR: {from: title}
+        - WEBRip: {from: title}
+        - Cam: {from: title}
+        - '(?x) (?:_|\b) (?: afg | msd | (\{?)c[_ ]p\1 | pimp4003 ) $': {from: title}
+
+    private_torrents: no
+    content_filter:
+      require:
+        - '*.avi'
+        - '*.mp4'
+        - '*.mkv'
+
+    transmission:
+      host: localhost
+      port: 9091
+      username: media
+      password: wt1lc111$
+      path: /media/shares/torrents/completed/movies
+
+    quality: 
+      - '720p+'
+      - 'hdtv+'
+    movie_queue: yes
+    proper_movies: no
+
+
+tasks:
+  watchlist:
+    priority: 1
+    interval: 4 hours
+    imdb_list:
+      user_id: ur29767314
+      list: watchlist
+    accept_all: yes
+    seen: local
+    queue_movies: yes
+
+  thepiratebay.org-movies:
+    priority: 2
+    rss: http://rss.thepiratebay.org/207
+    template: movies
+    interval: 15 minutes
+    verify_ssl_certificates: no
+
+  thepiratebay.org-series:
+    priority: 3
+    rss: http://rss.thepiratebay.org/208
+    template: tv
+    interval: 15 minutes
+    verify_ssl_certificates: no
